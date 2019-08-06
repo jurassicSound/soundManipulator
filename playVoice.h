@@ -4,17 +4,13 @@
 #include <vector>
 #include "xaudio2.h"
 
-//#include <xaudio2.h>
-//#include <xaudio2fx.h>
 #include <x3daudio.h>
-//#include <xapofx.h>
-
 
 #pragma comment(lib, "Xaudio2.lib")
 
 using namespace std;
 
-#ifdef _XBOX //Big-Endian
+#ifdef _XBOX
 #define fourccRIFF 'RIFF'
 #define fourccDATA 'data'
 #define fourccFMT 'fmt '
@@ -23,7 +19,7 @@ using namespace std;
 #define fourccDPDS 'dpds'
 #endif
 
-#ifndef _XBOX //Little-Endian
+#ifndef _XBOX
 #define fourccRIFF 'FFIR'
 #define fourccDATA 'atad'
 #define fourccFMT ' tmf'
