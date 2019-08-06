@@ -12,18 +12,6 @@ using namespace std;
 
 int main() {
 
-	/*
-	Sound program ToDo List
-	- MAKE IT SO THAT YOU STOP A SPECIFIC SOUND ON COMMAND
-	- MAKE IT SO THAT IT KEEPS A LIST OF WHICH SOUNDS WERE STARTED IN WHAT ORDER
-	- MAKE IT SO THAT IT CAN OUTPUT THE SOUNDS THAT PLAYING IN ORDER
-	- MAKE IT SO THAT YOU CAN GO BACK TO CHOOSING SOUNDS IF YOU TYPED IN THE WRONG SOUND
-	- MAKE IT SO THAT THE PROGRAM ALLOWS YOU TO CHOOSE A SOUND THAT IS PLAYING, AND THEN IT PRINTS OUT THE
-	SETTINGS OF THAT SOUND (VOLUME, PITCH, ECHO, etc.)
-	- MAKE IT SO THAT YOU CAN ACTIVELY CHANGE A SETTING (i.e. VOLUME) WHILE A SOUND IS PLAYING
-	- MAKE IT SO THAT YOU HAVE CATEGORIES OF SOUND (i.e. AMBIENCE, ANIMALS, MACHINES, etc.)
-	*/
-
  	CoInitialize(nullptr);
 
 	readText readPaths;
@@ -71,22 +59,9 @@ int main() {
 		}
 	}
 
-	cout << "\nThank you for using this work-in-progress audio playing system.";
-	//soundNumber = selectVoice.soundPicker(soundPaths);
-	//
-	//const TCHAR * strFileName = _TEXT(soundPaths[soundNumber].c_str());
-	//
-	//transmitAudio.playAudio(strFileName);
-	
+	cout << "\nThank you for using this work-in-progress audio playing system.";	
 	cout << "\n-------------------------------\n";
 
 	system("PAUSE");
 	return 0;
 }
-
-/*IXAudio2MasteringVoice* pMasterVoice = NULL;
-	if (FAILED(hr = pXAudio2->CreateMasteringVoice(&pMasterVoice))) {
-		return hr;
-	}
-
-	cout << "\n Succeed!" << endl << endl;*/
