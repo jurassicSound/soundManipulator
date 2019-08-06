@@ -36,13 +36,13 @@ HRESULT playVoice::playAudio(const TCHAR * strFileName, float volumeVariable, fl
 		WAVEFORMATEXTENSIBLE wfx = { 0 };
 		XAUDIO2_BUFFER buffer = { 0 };
 
-#ifdef _XBOX
+#ifdef _XBOX	//THE COMMENTED OUT CODE IN THIS SECTION WERE SOME EARLIER TESTS OF THE PROGRAM, DON'T UNCOMMENT THEM!
+	
 		//char * strFileName = "C:\modules\Paul\sounds\daisy.wav";
 #else
 		//	const TCHAR * strFileName = _TEXT("C:\\modules\\Paul\\sounds\\daisy.wav");
 		//	const TCHAR * strFileName = _TEXT("C:\\modules\\Paul\\sounds\\B17_Engine_Startup.wav");
 #endif
-		// Open the file
 		HANDLE hFile = CreateFile(strFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
 
 		if (INVALID_HANDLE_VALUE == hFile) {
@@ -61,7 +61,7 @@ HRESULT playVoice::playAudio(const TCHAR * strFileName, float volumeVariable, fl
 
 		DWORD dwChunkSize;
 		DWORD dwChunkPosition;
-		//check the file type, should be fourccWAVE or 'XWMA'
+
 		FindChunk(hFile, fourccRIFF, dwChunkSize, dwChunkPosition);
 		DWORD filetype;
 		ReadChunkData(hFile, &filetype, sizeof(DWORD), dwChunkPosition);
@@ -72,24 +72,20 @@ HRESULT playVoice::playAudio(const TCHAR * strFileName, float volumeVariable, fl
 		FindChunk(hFile, fourccFMT, dwChunkSize, dwChunkPosition);
 		ReadChunkData(hFile, &wfx, dwChunkSize, dwChunkPosition);
 
-		//fill out the audio data buffer with the contents of the fourccDATA chunk
 		FindChunk(hFile, fourccDATA, dwChunkSize, dwChunkPosition);
 
 
 		BYTE * pDataBuffer = new BYTE[dwChunkSize];
 		ReadChunkData(hFile, pDataBuffer, dwChunkSize, dwChunkPosition);
 
-		buffer.AudioBytes = dwChunkSize;  //buffer containing audio data
-		buffer.pAudioData = pDataBuffer;  //size of the audio buffer in bytes
-		buffer.Flags = XAUDIO2_END_OF_STREAM; // tell the source voice not to expect any data after this buffer
+		buffer.AudioBytes = dwChunkSize;
+		buffer.pAudioData = pDataBuffer;
+		buffer.Flags = XAUDIO2_END_OF_STREAM;
 		
 		IXAudio2SubmixVoice * pSFXSubmixVoice;
 		pXAudio2->CreateSubmixVoice(&pSFXSubmixVoice, 1, 44100, 0, 0, 0, 0);
 
 		XAUDIO2_SEND_DESCRIPTOR SFXSend = { 0, pSFXSubmixVoice };	
-
-		//SFXSend.Flags = 0;
-		//SFXSend.pOutputVoice = pSFXSubmixVoice;
 
 		XAUDIO2_VOICE_SENDS SFXSendList = { 1, &SFXSend };
 
@@ -105,8 +101,6 @@ HRESULT playVoice::playAudio(const TCHAR * strFileName, float volumeVariable, fl
 
 		// pan of -1.0 indicates all left speaker
 		//1.0 is all right speaker, 0.0 is split between left and right
-
-		//-->>float pan = 0.0f;
 
 		float left = 0.5f - pan / 2;
 		float right = 0.5f + pan / 2;
@@ -142,7 +136,6 @@ HRESULT playVoice::playAudio(const TCHAR * strFileName, float volumeVariable, fl
 			break;
 		}
 
-		// Assuming pVoice sends to pMasteringVoice
 		XAUDIO2_VOICE_DETAILS VoiceDetails;
 		pSFXSubmixVoice->GetVoiceDetails(&VoiceDetails);
 
@@ -159,16 +152,7 @@ HRESULT playVoice::playAudio(const TCHAR * strFileName, float volumeVariable, fl
 		}
 
 		pSFXSubmixVoice->SetVolume(volumeVariable);
-		pSFXSourceVoice->SetFrequencyRatio(pitchVariable);
-
-		//pSFXSubmixVoice->SetVolume(volumeVariable);
-		//
-		//float SourceVoiceChannelVolumes[1] = { 0.5 };
-		//
-		//hr = pSFXSourceVoice->SetChannelVolumes(1, SourceVoiceChannelVolumes);
-		//
-		//float outputMatrix[2] = { 1.0f, 1.0f };
-		//pSFXSourceVoice->SetOutputMatrix(pSFXSubmixVoice, 1, 2, outputMatrix);
+		pSFXSourceVoice->SetFrequencyRatio(pitchVariable);		
 
 		if (FAILED(hr = pSFXSourceVoice->SubmitSourceBuffer(&buffer))) {
 			return hr;
